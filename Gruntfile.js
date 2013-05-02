@@ -2,13 +2,14 @@
 /*global module:false */
 module.exports = function(grunt){
 
-  grunt.loadNpmTasks("grunt-contrib-requirejs");
+  grunt.loadNpmTasks("grunt-requirejs");
   grunt.loadNpmTasks("grunt-contrib-copy");
   grunt.loadNpmTasks("grunt-contrib-connect");
   grunt.loadNpmTasks("grunt-contrib-jshint");
   grunt.loadNpmTasks("grunt-contrib-watch");
   grunt.loadNpmTasks("grunt-simple-mocha");
   grunt.loadNpmTasks("grunt-es6-module-transpiler");
+  grunt.loadNpmTasks("grunt-contrib-clean");
 
   function serveBrook(base){
     function serveFile(res, next, path){
@@ -65,16 +66,33 @@ module.exports = function(grunt){
     },
 
     requirejs: {
+      options: {
+          almond: true,
+          optimize: 'none',
+          wrap: {
+            startFile: "build/start.frag",
+            endFile: "build/end.frag"
+          }
+      },
       brook: {
         options: {
-          baseUrl: "tmp/brook",
-          modules: [{ name: "brook" }],
           paths: {
             "brook": "index"
           },
-          optimize: 'none',
-          preserveLicenseComments: false,
-          dir: "dist/"
+          baseUrl: "tmp/brook",
+          include: ["brook"],
+          out: "dist/brook.js"
+        }
+      },
+      brookMin: {
+        options: {
+          paths: {
+            "brook": "index"
+          },
+          baseUrl: "tmp/brook",
+          optimize: "uglify",
+          include: ["brook"],
+          out: "dist/brook.min.js"
         }
       }
     },
@@ -82,6 +100,7 @@ module.exports = function(grunt){
     transpile: {
       main: {
         type: "amd",
+        anonymous: true,
         files: [{
           expand: true,
           cwd: 'packages',
@@ -93,10 +112,12 @@ module.exports = function(grunt){
       }
     },
 
+    clean: ['dist', 'tmp'],
+
     watch: {
       tests: {
         files: ['packages/*/tests/**/*.js', 'packages/**/*.js', 'vendor/**/*.js'],
-        tasks: ['jshint', 'qunit']
+        tasks: ['jshint', 'test']
       }
     },
 
@@ -137,6 +158,6 @@ module.exports = function(grunt){
 
   grunt.registerTask('test', ['transpile:enable', 'simplemocha:all']);
   grunt.registerTask('default', ['connect:server', 'watch']);
-  grunt.registerTask('build', ['transpile', 'requirejs', 'copy']);
+  grunt.registerTask('build', ['transpile:main', 'requirejs', 'copy']);
 
 };
