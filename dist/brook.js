@@ -536,14 +536,14 @@ define('brook',
   function(__dependency1__, __dependency2__, __dependency3__) {
     
     var dispatcher = __dependency1__.dispatcher;
-    var stream = __dependency2__.stream;
+    var eventStream = __dependency2__.eventStream;
     var next = __dependency3__.next;
     var done = __dependency3__.done;
     var error = __dependency3__.error;
 
     var Brook = {
       dispatcher: dispatcher,
-      stream: stream,
+      stream: eventStream,
       next: next,
       done: done,
       error: error

@@ -1,0 +1,34 @@
+<!doctype html>
+<html>
+<head>
+  <title>Brook.js Browser Example</title>
+</head>
+<body>
+
+  <label for="name">Please enter your name:</label>
+  <input type="text" name="name" id="name">
+  <button>Greet me!</button>
+  <p class="response"></p>
+
+  <script src="/brook-latest.js" language="javascript"></script>
+  <script src="http://code.jquery.com/jquery-2.0.0.min.js" language="javascript"></script>
+
+  <script language="javascript">
+    // This example doesn't show the full power of event streams.
+    //  It's just to show how to wrap an asynchronous operation in
+    //  in a stream. As Brook gets more advanced we'll see much
+    //  more use from streams than this simple example.
+    var stream =
+      Brook.stream(function(sink){
+        $("button").click(function(e){
+          sink(Brook.next(e));
+        });
+      });
+
+    stream.onValue(function(){
+      var message = "Hello " + $("#name").val();
+      $(".response").text(message);
+    });
+  </script>
+</body>
+</html>

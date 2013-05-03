@@ -30,7 +30,7 @@ module.exports = function(grunt){
 
       if(req.url == "/brook-latest.js"){
         fs = require("fs");
-        var brookPath = base + "/../dist/triforce.js";
+        var brookPath = base + "/../dist/brook.js";
         serveFile1(brookPath);
       } else if(req.url.match(/\.map$/)){
         path = base + "/../dist" + req.url;
@@ -140,12 +140,12 @@ module.exports = function(grunt){
       },
       examples: {
         options: {
-          port: 9001,
+          port: 9000,
           base: 'examples',
           keepalive: true,
           middleware: function(connect, options){
             return [
-              servebrook(options.base),
+              serveBrook(options.base),
               connect.static(options.base),
               connect.directory(options.base)
             ];
@@ -157,7 +157,7 @@ module.exports = function(grunt){
   });
 
   grunt.registerTask('test', ['transpile:enable', 'simplemocha:all']);
-  grunt.registerTask('default', ['connect:server', 'watch']);
+  grunt.registerTask('default', ['connect:examples', 'watch']);
   grunt.registerTask('build', ['transpile:main', 'requirejs', 'copy']);
 
 };
