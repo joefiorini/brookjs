@@ -454,15 +454,102 @@ define('lib/dispatcher',
 
     return { dispatcher: init };
   });
-define('brook',
-  ["lib/dispatcher"],
+define('lib/event-stream',
+  ["./dispatcher"],
   function(__dependency1__) {
     
     var dispatcher = __dependency1__.dispatcher;
 
+    function init(subscribe){
+
+      var self = {}, dispatch;
+
+      subscribe = dispatcher(subscribe).subscribe;
+
+      self.onValue = function(fn){
+        return subscribe(function(e){
+          return fn(e.value);
+        });
+      };
+
+      self.onError = function(fn){
+        return subscribe(function(e){
+          if(e.failed){
+            return fn(e.value);
+          }
+        });
+      };
+
+      self.onDone = function(fn){
+        return subscribe(function(e){
+          if(e.done){
+            return fn();
+          }
+        });
+      };
+
+      return Object.create(self);
+
+    }
+
+
+    return { eventStream: init };
+  });
+define('lib/event',
+  ["exports"],
+  function(__exports__) {
+    
+    function event(value){
+      var o = {
+      value: value,
+      done: false,
+      failed: false
+      };
+      return Object.create(o);
+    }
+
+    function done(){
+      var e = event();
+      e.done = true;
+      return e;
+    }
+
+    function next(value){
+      var e = event(value);
+      return e;
+    }
+
+    function error(err){
+      var e = event(err);
+      e.failed = true;
+      return e;
+    }
+
+
+
+    __exports__.done = done;
+    __exports__.next = next;
+    __exports__.error = error;
+  });
+define('brook',
+  ["lib/dispatcher","lib/event-stream","lib/event"],
+  function(__dependency1__, __dependency2__, __dependency3__) {
+    
+    var dispatcher = __dependency1__.dispatcher;
+    var stream = __dependency2__.stream;
+    var next = __dependency3__.next;
+    var done = __dependency3__.done;
+    var error = __dependency3__.error;
+
     var Brook = {
-      dispatcher: dispatcher
+      dispatcher: dispatcher,
+      stream: stream,
+      next: next,
+      done: done,
+      error: error
     };
+
+    window.Brook = Brook;
 
 
     return Brook;
