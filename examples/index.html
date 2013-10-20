@@ -9,26 +9,18 @@
   <input type="text" name="name" id="name">
   <button>Greet me!</button>
   <p class="response"></p>
+  <ul class="changes"></ul>
 
-  <script src="/brook-latest.js" language="javascript"></script>
-  <script src="http://code.jquery.com/jquery-2.0.0.min.js" language="javascript"></script>
-
-  <script language="javascript">
-    // This example doesn't show the full power of event streams.
-    //  It's just to show how to wrap an asynchronous operation in
-    //  in a stream. As Brook gets more advanced we'll see much
-    //  more use from streams than this simple example.
-    var stream =
-      Brook.stream(function(sink){
-        $("button").click(function(e){
-          sink(Brook.next(e));
-        });
-      });
-
-    stream.onValue(function(){
-      var message = "Hello " + $("#name").val();
-      $(".response").text(message);
+  <script data-main="main" src="/bower_components/requirejs/require.js"></script>
+  <script>
+    require.config({
+      baseUrl: "/",
+      paths: {
+          "jquery": "bower_components/jquery/jquery"
+      }
     });
   </script>
+  <script src="/brook-reactor-latest.js" language="javascript"></script>
+
 </body>
 </html>
