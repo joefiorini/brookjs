@@ -1,4 +1,4 @@
-import "expect.js" as expect;
+import expect from "expect.js";
 import {dispatcher} from "../lib/dispatcher";
 
 var subject, nop = function(){};
@@ -50,4 +50,4 @@ var test = {
   }
 };
 
-export = test;
+export default test;

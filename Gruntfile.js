@@ -32,6 +32,10 @@ module.exports = function(grunt){
         fs = require("fs");
         var brookPath = base + "/../dist/brook.js";
         serveFile1(brookPath);
+      } else if(req.url == "/brook-reactor-latest.js"){
+        fs = require("fs");
+        var brookPath = base + "/../dist/brook-reactor.js";
+        serveFile1(brookPath);
       } else if(req.url.match(/\.map$/)){
         path = base + "/../dist" + req.url;
         serveFile1(path);
@@ -67,32 +71,39 @@ module.exports = function(grunt){
 
     requirejs: {
       options: {
-          almond: true,
+          // almond: true,
           optimize: 'none',
-          wrap: {
-            startFile: "build/start.frag",
-            endFile: "build/end.frag"
-          }
+          paths: {
+            "brook": "brook",
+            "brook-reactor": "brook-reactor"
+          },
+          baseUrl: "tmp"
+          // wrap: {
+          //   startFile: "build/start.frag",
+          //   endFile: "build/end.frag"
+          // }
       },
       brook: {
         options: {
-          paths: {
-            "brook": "index"
-          },
-          baseUrl: "tmp/brook",
           include: ["brook"],
           out: "dist/brook.js"
         }
       },
       brookMin: {
         options: {
-          paths: {
-            "brook": "index"
-          },
-          baseUrl: "tmp/brook",
           optimize: "uglify",
           include: ["brook"],
           out: "dist/brook.min.js"
+        }
+      },
+      reactor: {
+        options: {
+          include: ["brook-reactor"],
+          out: "dist/brook-reactor.js"
+          // wrap: {
+          //   startFile: "build/start.frag",
+          //   endFile: "build/end-reactor.frag"
+          // }
         }
       }
     },
@@ -107,8 +118,6 @@ module.exports = function(grunt){
           src: ['**/*.js'],
           dest: 'tmp/'
         }]
-      },
-      enable: {
       }
     },
 

@@ -3,10 +3,10 @@
 (function (root, factory) {
     if (typeof define === 'function' && define.amd) {
         // AMD.
-        define(['jquery', 'underscore'], factory);
+        define(factory);
     } else {
         // Browser globals
-        root.principium = factory(root.$, root._);
+        root.Brook = factory();
     }
-}(this, function ($, _) {
+}(this, function () {
 

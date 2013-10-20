@@ -1,4 +1,4 @@
-import "expect.js" as expect;
+import expect from "expect.js";
 import {done, next, error} from "../lib/event";
 
 var subject, nop = function(){};
@@ -21,4 +21,4 @@ var test = {
   }
 };
 
-export = test;
+export default test;

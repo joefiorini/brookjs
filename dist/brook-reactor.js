@@ -127,3 +127,48 @@ define('brook',
 
     __exports__['default'] = Brook;
   });
+define('brook-reactor/reaction',
+  ["brook/event-stream","brook/event","exports"],
+  function(__dependency1__, __dependency2__, __exports__) {
+    
+    var eventStream = __dependency1__.eventStream;
+    var next = __dependency2__.next;
+    var done = __dependency2__.done;
+    var error = __dependency2__.error;
+
+    function reaction(){
+
+      var self = {}, push;
+
+      var stream = eventStream(function(sink){
+        push = sink;
+      });
+
+      stream.push = function(value){
+        push(next(value));
+      };
+
+      stream.error = function(err){
+        push(error(value));
+      };
+
+      stream.done = function(value){
+        push(done());
+      };
+
+      return stream;
+    }
+
+    __exports__.reaction = reaction;
+  });
+define('brook-reactor',
+  ["brook","brook-reactor/reaction","exports"],
+  function(__dependency1__, __dependency2__, __exports__) {
+    
+    var Brook = __dependency1__.default;
+    var reaction = __dependency2__.reaction;
+
+    Brook.reaction = reaction;
+
+    __exports__['default'] = Brook;
+  });

@@ -1,4 +1,4 @@
-function init(subscribe){
+function dispatcher(subscribe){
 
   var self = {}, subscribers = [];
 
@@ -26,4 +26,4 @@ function init(subscribe){
 
 }
 
-export = { dispatcher: init };
+export { dispatcher };

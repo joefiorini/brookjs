@@ -1,4 +1,4 @@
-import "expect.js" as expect;
+import expect from "expect.js";
 import {eventStream} from "../lib/event-stream";
 
 var testStream = function(fn){
@@ -56,4 +56,4 @@ var test = {
   }
 };
 
-export = test;
+export default test;

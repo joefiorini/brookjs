@@ -1,6 +1,6 @@
-import {dispatcher} from "./dispatcher";
+import {dispatcher} from "brook/dispatcher";
 
-function init(subscribe){
+function eventStream(subscribe){
 
   var self = {}, dispatch;
 
@@ -32,4 +32,4 @@ function init(subscribe){
 
 }
 
-export = { eventStream: init };
+export { eventStream };
